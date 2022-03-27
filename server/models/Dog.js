@@ -30,24 +30,23 @@ const DogSchema = new mongoose.Schema({
 });
 
 DogSchema.statics.findByName = (name, callback) => {
-  const search = {name};
-  //const update = { age: age + 1 };
-  //const opt = {new: true};
+  const search = { name };
+  // const update = { age: age + 1 };
+  // const opt = {new: true};
 
   return DogModel.findOne(search, callback);
-  //return DogModel.findOneAndUpdate(search, update, callback);
+  // return DogModel.findOneAndUpdate(search, update, callback);
 };
 
-DogSchema.statics.findAndUpdate = (name, age, callback) =>{
-    const search = {name};
-    const update = {age: age + 1};
+/* DogSchema.statics.findAndUpdate = (name, age, callback) => {
+  const search = { name };
+  const update = { age: age + 1 };
 
-    return DogModel.findOneAndUpdate(search, update, {
-        new: true,
-        upsert: true,
-    });
-
-};
+  return DogModel.findOneAndUpdate(search, update, {
+    new: true,
+    upsert: true,
+  });
+}; */
 
 DogModel = mongoose.model('Dog', DogSchema);
 
