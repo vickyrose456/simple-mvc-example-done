@@ -275,13 +275,12 @@ const searchName = (req, res) => {
 
 const searchDogName = (req, res) => {
   // check if there is a query parameter for name
-  // POSTS send data to add while GETS query for a page or data (such as a search)
-  if (!req.query.name) {
+  if (!req.body.name) {
     return res.status(400).json({ error: 'Name is required to perform a search' });
-  }
+  }//end query parameter check
 
   // Call our Dog's static findByName function.
-  return Dog.findByName(req.query.name, (err, doc) => {
+  return Dog.findByName(req.body.name, (err, doc) => {
     // handle error
     if (err) {
       return res.status(500).json({ err }); // if error, return it
@@ -292,9 +291,30 @@ const searchDogName = (req, res) => {
       return res.json({ error: 'No dogs found' });
     }
 
-    // if a match, send the match back
-    return res.json({ name: doc.name, breed: doc.breed, age: doc.age });
-  });
+    // if a match, send the match back and update the age by 1.
+    lastAddedDog = {
+      name: doc.name,
+      breed: doc.breed, 
+      age: doc.age
+    }
+
+    lastAddedDog.age++;
+
+    const savePromise = lastAdded.save();
+
+    // send back the name as a success for now
+    savePromise.then(() => res.json({ name: lastAdded.name, breed: lastAddedDog.breed, age: lastAdded.age }));
+  
+    // if save error, just return an error for now
+    savePromise.catch((err) => res.status(500).json({ err }));
+
+    return res.json(lastAddedDog);
+   //return res.json({ name: doc.name, breed: doc.breed, age: doc.age });
+
+  });//end of search inquiry
+  
+
+
 };// end of search dog name
 
 // function to handle a request to update the last added object
